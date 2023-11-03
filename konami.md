@@ -56,4 +56,6 @@ During the game loop initialization, KONAMI_CODE_STATUS is read:
 
 If the 'success' switch is active, P1_NUM_LIVES is set to 29; else it is set to the default 2.
 
-That's it! All credit to [vermiceli](https://github.com/vermiceli/nes-contra-us/) for the code.
+That's it! Those were simpler times.
+
+All credit to [vermiceli](https://github.com/vermiceli/nes-contra-us/) for the code.
