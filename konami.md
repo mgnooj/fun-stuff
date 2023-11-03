@@ -1,10 +1,10 @@
 # How Did Contra Detect the Konami Code (on the NES)?
 
-On a console where every last bit in memory was crucial, how much of the system resources did Konami developers allocate to accomplishing the enormously important task of scanning user input for the Konami Code?
+On a game console where every bit had to be squeezed for performance, how much of the system resources did Konami developers allocate to accomplishing the crucial task of scanning user input for the Konami Code?
 
 Thankfully, GitHub user vermiceli recently shared a [complete dissassembly of the NES version of Contra](https://github.com/vermiceli/nes-contra-us/), so we can check out the original algorithm:
 
-    ## From [https://github.com/vermiceli/nes-contra-us/blob/main/src/bank7.asm](https://github.com/vermiceli/nes-contra-us/blob/main/src/bank7.asm)
+## From [https://github.com/vermiceli/nes-contra-us/blob/main/src/bank7.asm](https://github.com/vermiceli/nes-contra-us/blob/main/src/bank7.asm)
 
     ```
     ; checks if current input is part of Kazuhisa Hashimoto's famous Konami code (30-lives code)
@@ -39,20 +39,16 @@ Thankfully, GitHub user vermiceli recently shared a [complete dissassembly of th
 
 Let's break this down:
 
-    - KONAMI_CODE_NUM_CORRECT stores a running count of the number of consecutive Konami code button presses. (By extension, every time you press "UP", this value gets incremented; and so on for each additional correct button input.)
+- KONAMI_CODE_NUM_CORRECT stores a running count of the number of consecutive Konami code button presses. (By extension, every time you press "UP", this value gets incremented;and so on for each additional correct button input.)
+- KONAMI_CODE_STATUS reserves a bit as a 'success' switch for when the full code has been detected.
+- konami_code_lookup_table is a byte array representation of the Konami code.
+- konami_input_check gets any current user input and compares it to the element of the lookup table at index KONAMI_CODE_NUM_CORRECT.
+If they are identical, konami_input_index_correct is called; else, KONAMI_CODE_NUM_CORRECT is reset to zero.
+- konami_input_index_correct increments KONAMI_CODE_NUM_CORRECT and then checks if it is equal to 10. If it is, the KONAMI_CODE_STATUS flag is raised; else, we exit the process.
 
-    - KONAMI_CODE_STATUS reserves a bit as a 'success' switch for when the full code has been detected.
+In other words, the user input is never stored; instead, the algorithm counts consecutive Konami code button presses by comparing the current input to a Konami code lookup table at a given index (i.e. the current count of correct Konami code button presses).
 
-    - konami_code_lookup_table is a byte array representation of the Konami code.
-
-    - konami_input_check gets any current user input and compares it to the element of the lookup table at index KONAMI_CODE_NUM_CORRECT.
-    If they are identical, konami_input_index_correct is called; else, KONAMI_CODE_NUM_CORRECT is reset to zero.
-
-    - konami_input_index_correct increments KONAMI_CODE_NUM_CORRECT and then checks if it is equal to 10. If it is, the KONAMI_CODE_STATUS flag is raised; else, we exit the process.
-
-In other words, the user input is never stored; instead, the algorithm counts consecutive Konami code button presses by comparing the current input to a Konami code lookup table at a given index (namely, the current count of correct Konami code button presses).
-
-During the game loop initialization, KONAMI_CODE_STATUS is checked:
+During the game loop initialization, KONAMI_CODE_STATUS is read:
 
     ```
     init_player_lives:
@@ -64,6 +60,4 @@ During the game loop initialization, KONAMI_CODE_STATUS is checked:
 
 If the 'success' switch is active, P1_NUM_LIVES is set to 29; else it is set to the default 2.
 
-That's it! For me, this algorithm brings to mind the famous Rob Pike paraphrase, "Write dumb code with smart data structures." Sometimes a lookup table and a couple of global variables are enough to do all the heavy lifting.
-
-All credit to [vermiceli](https://github.com/vermiceli/nes-contra-us/) for the code.
+That's it! All credit to [vermiceli](https://github.com/vermiceli/nes-contra-us/) for the code.
