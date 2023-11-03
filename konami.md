@@ -4,9 +4,6 @@ On a game console where every bit had to be squeezed for performance, how much o
 
 Thankfully, GitHub user vermiceli recently shared a [complete dissassembly of the NES version of Contra](https://github.com/vermiceli/nes-contra-us/), so we can check out the original algorithm:
 
-## From [https://github.com/vermiceli/nes-contra-us/blob/main/src/bank7.asm](https://github.com/vermiceli/nes-contra-us/blob/main/src/bank7.asm)
-
-    ```
     ; checks if current input is part of Kazuhisa Hashimoto's famous Konami code (30-lives code)
     ; if completed input successfully, set KONAMI_CODE_STATUS to #$01
     konami_input_check:
@@ -35,7 +32,8 @@ Thankfully, GitHub user vermiceli recently shared a [complete dissassembly of th
     ; table for Konami code (30-lives code) - up up down down ...
     konami_code_lookup_table:
         .byte $08,$08,$04,$04,$02,$01,$02,$01,$40,$80
-    ```
+
+Source: [https://github.com/vermiceli/nes-contra-us/blob/main/src/bank7.asm](https://github.com/vermiceli/nes-contra-us/blob/main/src/bank7.asm)
 
 Let's break this down:
 
@@ -50,13 +48,11 @@ In other words, the user input is never stored; instead, the algorithm counts co
 
 During the game loop initialization, KONAMI_CODE_STATUS is read:
 
-    ```
     init_player_lives:
         lda #$02                  ; start of with #$02 lives
         ldy KONAMI_CODE_STATUS    ; 30-lives code switch ($01 = code activated)
         beq init_player_num_lives ; if KONAMI_CODE_STATUS is not set, then just set 2 lives
         lda #$1d                  ; KONAMI_CODE_STATUS active so set lives to #$1d (29 decimal)
-    ```
 
 If the 'success' switch is active, P1_NUM_LIVES is set to 29; else it is set to the default 2.
 
