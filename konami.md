@@ -37,7 +37,7 @@ Source: [https://github.com/vermiceli/nes-contra-us/blob/main/src/bank7.asm](htt
 
 Let's break this down:
 
-- KONAMI_CODE_NUM_CORRECT stores a running count of the number of consecutive Konami code button presses. (By extension, every time you press "UP", this value gets incremented;and so on for each additional correct button input.)
+- KONAMI_CODE_NUM_CORRECT stores a running count of the number of consecutive Konami code button presses. (By extension, every time you press "UP", this value gets incremented; and so on for each additional correct button input.)
 - KONAMI_CODE_STATUS reserves a bit as a 'success' switch for when the full code has been detected.
 - konami_code_lookup_table is a byte array representation of the Konami code.
 - konami_input_check gets any current user input and compares it to the element of the lookup table at index KONAMI_CODE_NUM_CORRECT.
