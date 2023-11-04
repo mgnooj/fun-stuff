@@ -2,7 +2,7 @@
 
 On a game console where every bit had to be squeezed for performance, how much of the system resources did Konami developers allocate to accomplishing the crucial task of scanning user input for the Konami Code?
 
-Thankfully, GitHub user vermiceli recently shared a [complete dissassembly of the NES version of Contra](https://github.com/vermiceli/nes-contra-us/), so we can check out the original algorithm:
+Thankfully, GitHub user vermiceli recently shared a [complete and commented dissassembly of the NES version of Contra](https://github.com/vermiceli/nes-contra-us/), so we can check out the original algorithm:
 
     ; checks if current input is part of Kazuhisa Hashimoto's famous Konami code (30-lives code)
     ; if completed input successfully, set KONAMI_CODE_STATUS to #$01
